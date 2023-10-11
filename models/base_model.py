@@ -12,7 +12,7 @@ class BaseModel:
         Initialize BaseModel class
 
         Args:
-            *args (any): Unused.
+            *args: Unused.
             **kwargs (dict): Key/value pairs of attributes.
 
         """
