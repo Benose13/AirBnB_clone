@@ -7,11 +7,28 @@ from datetime import datetime
 
 class BaseModel:
     """Defines BaseModel as the base for other classes."""
-    def __init__(self):
-        """Instance attributes for BaseModel."""
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+    def __init__(self, *args, **kwargs):
+        """
+        Initialize BaseModel class
+
+        Args:
+            *args (any): Unused.
+            **kwargs (dict): Key/value pairs of attributes.
+
+        """
+        if kwargs:
+            if kwargs["__class__"] == self.__class__.__name__:
+                self.id, self.created_at, self.updated_at, *_ = kwargs.values()
+                self.created_at = datetime.strptime(
+                        self.created_at, "%Y-%m-%dT%H:%M:%S.%f"
+                        )
+                self.updated_at = datetime.strptime(
+                        self.updated_at, "%Y-%m-%dT%H:%M:%S.%f"
+                        )
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
 
     def __str__(self):
         """print the attributes in the module"""
