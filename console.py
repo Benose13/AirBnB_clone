@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" This module contains the command-line/console interface for the HBNB system.
+""" This module contains the console interface for the HBNB system.
 """
 import cmd
 from models.base_model import BaseModel
@@ -39,8 +39,8 @@ class HBNBCommand(cmd.Cmd):
             except AttributeError:
                 print("** class doesn't exist **")
 
-    def show(self, args):
-        """Prints the string rep of an instance based on the class name and id."""
+    def do_show(self, args):
+        """Prints the instance based on the class name and id."""
         if not args:
             print("** class name missing **")
         else:
@@ -60,8 +60,8 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print(instance)
 
-    def destroy(self, args):
-        """Delete an instance based on the class name and id (save the change into the JSON file)."""
+    def do_destroy(self, args):
+        """Delete an instance based on the class name and id"""
         if not args:
             print("** class name missing **")
         else:
@@ -73,9 +73,8 @@ class HBNBCommand(cmd.Cmd):
 
             if len(args) < 2:
                 print("** instance id missing **")
-
-           instance_id = args[1]
-           instance = models.storage.get(model_class, instance_id)
+            instance_id = args[1]
+            instance = models.storage.get(model_class, instance_id)
 
             if not instance:
                 print("** no instance found **")
@@ -107,34 +106,32 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
 
     def do_update(self, args):
-    """Updates an instance."""
-    if not args:
-        print("** class name missing **")
-    elif len(args) < 2:
-        print("** instance id missing **")
-    elif len(args) < 3:
-        print("** attribute name missing **")
-    elif len(args) < 4:
-        print("** value missing **")
-    else:
-        class_name = args[0]
-        instance_id = args[1]
-        attribute_name = args[2]
-        attribute_value = args[3]
+        """Updates an instance."""
+        if not args:
+            print("** class name missing **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        elif len(args) < 3:
+            print("** attribute name missing **")
+        elif len(args) < 4:
+            print("** value missing **")
+        else:
+            class_name = args[0]
+            instance_id = args[1]
+            attribute_name = args[2]
+            attribute_value = args[3]
 
-        try:
-            model_class = getattr(models, class_name)
-            instance = models.storage.get(model_class, instance_id)
+            try:
+                model_class = getattr(models, class_name)
+                instance = models.storage.get(model_class, instance_id)
 
-            if not instance:
-                print("** no instance found **")
-            else:
-                setattr(instance, attribute_name, attribute_value)
-                instance.save()
-        except AttributeError:
-            print("** class doesn't exist **")
-
-
+                if not instance:
+                    print("** no instance found **")
+                else:
+                    setattr(instance, attribute_name, attribute_value)
+                    instance.save()
+            except AttributeError:
+                print("** class doesn't exist **")
 
 
 if __name__ == '__main__':
