@@ -39,14 +39,14 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     class_s = {
-    'BaseModel': BaseModel,
-    'User': User
+            'BaseModel': BaseModel,
+            'User': User
     }
 
     def newcmd(self, args):
         """Handles user input such as for all classes and description
         """
-        arguments= args.split(".")
+        arguments = args.split(" . ")
         if len(arguments) > 1:
             inside_p = args[args.index(".") + 1:args.index("(")]
             if inside_p == "all":
@@ -59,9 +59,8 @@ class HBNBCommand(cmd.Cmd):
                 print(len(lists_objects(do_parenthesis(args))))
                 return
             elif inside_p == "update":
-            	return self.do_update(do_parenthesis(args))
+                return self.do_update(do_parenthesis(args))
         return super(HBNBCommand, self).newcmd(args)
-
 
     def emptyline(self):
         """ Do nothing upon receiving an empty line. """
@@ -78,7 +77,7 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
-    def do_create(self, args):
+    def create(self, args):
         """new instance of BaseModel, saved to the JSON file"""
         if not args:
             print("** class name missing **")
@@ -92,7 +91,7 @@ class HBNBCommand(cmd.Cmd):
             except AttributeError:
                 print("** class doesn't exist **")
 
-    def do_show(self, args):
+    def show(self, args):
         """Prints the instance based on the class name and id."""
         if not args:
             print("** class name missing **")
@@ -113,12 +112,13 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print(instance)
 
-    def do_destroy(self, args):
+    def destroy(self, args):
         """Delete an instance based on the class name and id"""
         if not args:
             print("** class name missing **")
         else:
             class_name = args[0]
+
             try:
                 model_class = getattr(models, class_name)
             except AttributeError:
@@ -135,7 +135,7 @@ class HBNBCommand(cmd.Cmd):
                 models.storage.delete(instance)
                 models.storage.save()
 
-    def do_all(self, args):
+    def all(self, args):
         """Prints the string representation of all instances"""
         model_classes = models.all_classes()
 
@@ -158,7 +158,7 @@ class HBNBCommand(cmd.Cmd):
             except AttributeError:
                 print("** class doesn't exist **")
 
-    def do_update(self, args):
+    def update(self, args):
         """Updates an instance."""
         if not args:
             print("** class name missing **")

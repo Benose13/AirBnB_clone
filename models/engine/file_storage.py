@@ -9,6 +9,7 @@ from models.user import User
 from os import path
 
 
+
 class FileStorage:
     """
     This class that serialize and deserialize instances of models
