@@ -1,24 +1,31 @@
 #!/usr/bin/python3
 """
-Contains the class BaseModel that defines all common attributes/methods
+A Super BaseModel class that defines all classes of
+the HBNB project; AIRBNB clone.
 """
-import models
+
 import uuid
+import models
 from datetime import datetime
 
 
 class BaseModel():
     """
-    Defines BaseModel as the base for other classes.
+    Attributes:
+    id (str): string assigned to universal unique identifier.
+    created_at (datetime): current datetime when instance created.
+    updated_at (datetime): current datetime when an instance is created
+        and it will be updated every time that object changes.
+
     """
+    # re-create an instance with dictionary representation.
     def __init__(self, *args, **kwargs):
         """
         Initialize BaseModel class
 
         Args:
-            *args: Unused.
-            **kwargs (dict): Key/value pairs of attributes.
-
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword argument.
         """
         if kwargs:
             if kwargs["__class__"] == self.__class__.__name__:
@@ -32,35 +39,32 @@ class BaseModel():
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            self.updated_at = self.created_at
             models.storage.new(self)
-
-    def __str__(self):
-        """
-        returns informal representation of an instance
-        in the format [<class name>] (<self.id>) <self.__dict__>
-        """
-        return "[{}] ({}) {}".format(
-            self.__class__.__name__, self.id, self.__dict__)
 
     def save(self):
         """
-        Update the 'updated_at' attribute with the current date and time.
+        Updates the public instance attribute
+        'updated_at' with the current datetime
+
         """
         self.updated_at = datetime.now()
         models.storage.save()
 
     def to_dict(self):
         """
-        returns a dictionary containing all keys/values of __dict__
-        of the instance
+        Returns a dictionary representation of the object's attributes.
+        Copies the instance's __dict__ and
+        adds the __class__ key with the class name.
         """
+        obj_dict = self.__dict__.copy()
+        obj_dict['__class__'] = self.__class__.__name__
+        obj_dict['created_at'] = self.created_at.isoformat()
+        obj_dict['updated_at'] = self.updated_at.isoformat()
+        return obj_dict
+
+    def __str__(self):
         """
-        a key __class__ must be added to this dictionary
-        with the class name of the object
+        Return the string representation of the class for the user.
         """
-        dict_cp = self.__dict__.copy()
-        dict_cp['__class__'] = self.__class__.__name__
-        dict_cp['created_at'] = self.created_at.isoformat()
-        dict_cp['updated_at'] = self.updated_at.isoformat()
-        return dict_cp
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
