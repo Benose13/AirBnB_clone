@@ -39,14 +39,14 @@ class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
     class_s = {
-    'BaseModel': BaseModel,
-    'User': User
+            'BaseModel': BaseModel,
+            'User': User
     }
 
     def newcmd(self, args):
         """Handles user input such as for all classes and description
         """
-        arguments= args.split(".")
+        arguments = args.split(" . ")
         if len(arguments) > 1:
             inside_p = args[args.index(".") + 1:args.index("(")]
             if inside_p == "all":
@@ -59,9 +59,8 @@ class HBNBCommand(cmd.Cmd):
                 print(len(lists_objects(do_parenthesis(args))))
                 return
             elif inside_p == "update":
-            	return self.do_update(do_parenthesis(args))
+                return self.do_update(do_parenthesis(args))
         return super(HBNBCommand, self).newcmd(args)
-
 
     def emptyline(self):
         """ Do nothing upon receiving an empty line. """
@@ -119,6 +118,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             class_name = args[0]
+
             try:
                 model_class = getattr(models, class_name)
             except AttributeError:
