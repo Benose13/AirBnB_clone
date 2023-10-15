@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """Class FileStorage"""
+import os
 import json
 from models.base_model import BaseModel
 from models.user import User
@@ -28,12 +29,21 @@ class FileStorage:
 
     def reload(self):
         """deserialize json"""
-        try:
-            with open(FileStorage.__file_path) as f:
-                objdict = json.load(f)
-                for o in objdict.values():
-                    cls_name = o["__class__"]
-                    del o["__class__"]
-                    self.new(eval(cls_name)(**o))
+        ry:
+            with open(self.__file_path, 'r') as file:
+                content = file.read()
+                if not content:
+                    return
+
+            objects_dict = json.loads(content)
+
+            for key, value in objects_dict.items():
+                class_name, obj_id = key.split(".")
+
+                if class_name in class_names:
+                    obj_class = class_names[class_name]
+                    deserialized_obj = obj_class(**value)
+                    obj_key = "{}.{}".format(class_name, obj_id)
+                    self.__objects[obj_key] = deserialized_obj
         except FileNotFoundError:
-            return
+            pass
