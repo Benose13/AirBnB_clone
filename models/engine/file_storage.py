@@ -12,19 +12,19 @@ class FileStorage:
 
     def all(self):
         """return __objects"""
-        return FileStorage.__objects
+        return self.__objects
 
     def new(self, obj):
         """ put key(class name.id) and obj value in obj dic"""
         key = f"{obj.__class__.__name__}.{obj.id}"
-        FileStorage.__objects[key] = obj
+        self.__objects[key] = obj
 
     def save(self):
         """serialize a dic"""
         data = {}
-        for key, obj in FileStorage.__objects.items():
+        for key, obj in self.__objects.items():
             data[key] = obj.to_dict()
-        with open(FileStorage.__file_path, "w") as file:
+        with open(self.__file_path, "w") as file:
             json.dump(data, file)
 
     def reload(self):
